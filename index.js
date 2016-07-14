@@ -14,17 +14,26 @@ var ambient = ambientlib.use(tessel.port['A']);
 
 ambient.on('ready', function () {
  // Get points of light and sound data.
+ var leds = tessel.led;
   setInterval( function () {
     // ambient.getLightLevel( function(err, lightdata) {
       // if (err) throw err;
       ambient.getSoundLevel( function(err, sounddata) {
+        var timeCounter, i;
         if (err) throw err;
         console.log("Sound Level:", sounddata.toFixed(8));
         if (sounddata.toFixed(8) > 0.1) {
-           flashLed(0, 0);
-           flashLed(1, 100);
-           flashLed(2, 200);
-           flashLed(3, 300);
+          timeCounter = 0;
+          for (i = 0; i < leds.length; i++) {
+             console.log('First loop i is ', i);
+             timeCounter += 100;
+             flashLed(i, timeCounter);
+          }
+          for (i = leds.length - 1; i>=0; i--) {
+             console.log('Second loop i is ', i);
+             timeCounter += 100;
+             flashLed(i, timeCounter);
+          }
         }
       });
     // });
